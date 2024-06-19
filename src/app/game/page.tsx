@@ -4,10 +4,11 @@ import Image, { StaticImageData } from "next/image";
 import {useRouter} from "next/navigation";
 import { useState } from "react";
 
-import ingTitle from "@/../public/game_ing_title.png";
-import gameEnd from "@/../public/game_end.png";
+import ingTitle2 from "@/../public/game_ing_title_02.png";
+import gameEnd2 from "@/../public/game_end_02.png";
 import starOn from "@/../public/star_on.png";
 import starOff from "@/../public/star_off.png";
+import playNowBtn from "@/../public/play_now_button.png"
 
 type contType = {
     examImg: string | StaticImageData;
@@ -85,11 +86,14 @@ export default function Login() {
       {contentNumber === imgSource.length ? (
         <>
           <div className="flex flex-col h-screen justify-center items-center gap-2">
-            <Image src={gameEnd} alt=""/>
-            <div className="flex gap-1">
+            <Image src={gameEnd2} alt=""/>
+            <div className="flex gap-1 mb-[14vh]">
               {contents.map((cont, idx) => 
                 <Image className="w-[12vw] h-[12vw]" key={idx} src={cont.answer ? starOn : starOff} alt=""/>
               )}
+            </div>
+            <div className="absolute bottom-0 p-[2vw]">
+              <Image src={playNowBtn} alt=""/>
             </div>
           </div>
           {/* {contents.map((cont, idx) => 
@@ -100,7 +104,7 @@ export default function Login() {
         <>
         <div className="flex flex-col h-screen">
           <div>
-            <Image src={ingTitle} alt=""/>
+            <Image src={ingTitle2} alt=""/>
           </div>
           <div className="grid grid-cols-2 grid-rows-2 flex-grow gap-2">
             {Array.from({length: 4}).map((_, idx) => 
