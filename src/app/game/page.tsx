@@ -2,7 +2,7 @@
 
 import Image, { StaticImageData } from "next/image";
 import {useRouter} from "next/navigation";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 
 import ingTitle2 from "@/../public/game_ing_title_02.png";
 import gameEnd2 from "@/../public/game_end_02.png";
@@ -11,15 +11,57 @@ import starOff from "@/../public/star_off.png";
 import playNowBtn from "@/../public/play_now_button.png"
 
 type contType = {
-    examImg: string | StaticImageData;
-    answerImg: string | StaticImageData;
-    ingState: boolean;
-    answer: boolean;
+  examImg: string | StaticImageData;
+  answerImg: string | StaticImageData;
+  ingState: boolean;
+  answer: boolean;
+}
+
+function pop(e: MouseEvent) {
+  for (let i = 0; i < 30; i++) {
+    createParticle(e.clientX, e.clientY);
   }
+}
+
+function createParticle(x:number, y:number) {
+  const particle = document.createElement("particle");
+  document.body.appendChild(particle);
+
+  const size = Math.floor(Math.random() * 20 + 5);
+
+  particle.style.width = `${size}px`;
+  particle.style.height = `${size}px`;
+
+  const destinationX = x + (Math.random() - 0.5) * 2 * 75;
+  const destinationY = y + (Math.random() - 0.5) * 2 * 75;
+
+  particle.style.background = `hsl(${Math.random() * 90 + 270}, 100%, ${Math.random() * 25 + 50}%)`;
+  particle.style.borderRadius = "50%";
+  particle.style.border = "1px solid white";
+
+  particle.animate(
+    [
+      {
+        // Set the origin position of the particle
+        // We offset the particle with half its size to center it around the mouse
+        transform: `translate(${x - size / 2}px, ${y - size / 2}px)`,
+        opacity: 1,
+      },
+      {
+        // We define the final coordinates as the second keyframe
+        transform: `translate(${destinationX}px, ${destinationY}px)`,
+        opacity: 0,
+      },
+    ],
+    {
+      duration: 500 + Math.random() * 1000,
+      easing: "cubic-bezier(0, .9, .57, 1)",
+      delay: Math.random() * 200,
+    }
+  );
+}
 
 export default function Login() {
-    const imgWidth: number = 100;
-  const imgHeight: number = 100;
   const imgSource = [
     // {
     //   examImg: content1,
@@ -66,19 +108,21 @@ export default function Login() {
   ];
 
   const [contents, setContents] = useState<contType[]>(imgSource);
+  const [pickNumber, setPickNumber] = useState<number | null>(null);
   const [contentNumber, setContentNumber] = useState<number>(0);
   const [answerNumber, setAnswerNumber] = useState<number>(~~(Math.random() * 4));
 
-  // useEffect(() => {
-  //   setContents(imgSource);
-  
-  // }, [])
-  
+  const clickImgHandle = (imgPickNumber: number, e: MouseEvent) => {
+    setContents((prev) => prev.map((cont, idx) => contentNumber !== idx ? cont : ({...cont, ingState: true, answer: answerNumber === imgPickNumber})));
+    setPickNumber(imgPickNumber);
+    pop(e);
 
-  const clickImgHandle = (pickNumber: number) => {
-    setContents((prev) => prev.map((cont, idx) => contentNumber !== idx ? cont : ({...cont, ingState: true, answer: answerNumber === pickNumber})));
-    setContentNumber((prev) => prev + 1);
-    setAnswerNumber(~~(Math.random() * 4));
+    // 딜레이 생성
+    setTimeout(() => {
+      setPickNumber(null);
+      setContentNumber((prev) => prev + 1);
+      setAnswerNumber(~~(Math.random() * 4));
+    }, 1000);
   }
 
   return (
@@ -102,34 +146,22 @@ export default function Login() {
         </>
       ) : (
         <>
-        <div className="flex flex-col h-screen">
-          <div>
-            <Image src={ingTitle2} alt=""/>
-          </div>
-          <div className="grid grid-cols-2 grid-rows-2 flex-grow gap-2">
-            {Array.from({length: 4}).map((_, idx) => 
-              <div 
-                className="bg-cover bg-center border-solid border-2 border-[#1f2f83] rounded-lg overflow-hidden shadow-md" 
-                style={{ backgroundImage: `url(${idx === answerNumber ? contents.at(contentNumber)!.answerImg : contents.at(contentNumber)!.examImg})` }}
-                key={idx} 
-                onClick={() => clickImgHandle(idx)}
-              >
-              </div>
-            )}
-          </div>
-        </div>
-          {/* <div className="flex flex-col justify-between h-screen py-[10vh]">
+          <div className="flex flex-col h-screen">
             <div>
-              <Image src={ingTitle} alt=""/>
+              <Image src={ingTitle2} alt=""/>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 grid-rows-2 flex-grow gap-2">
               {Array.from({length: 4}).map((_, idx) => 
-                <div className="border-solid border-2 border-[#1f2f83] rounded-lg overflow-hidden shadow-md" key={idx} onClick={() => clickImgHandle(idx)}>
-                  <Image className="w-full" src={idx === answerNumber ? contents.at(contentNumber)!.answerImg : contents.at(contentNumber)!.examImg} alt=""/>
+                <div 
+                  className={`bg-cover bg-center border-solid rounded-lg overflow-hidden shadow-md${pickNumber === idx ? pickNumber === answerNumber ? ' border-4 border-[#38b700]' : ' border-4 border-[#ff0000]' : ' border-2 border-[#1f2f83]'}`} 
+                  style={{ backgroundImage: `url(${idx === answerNumber ? contents.at(contentNumber)!.answerImg : contents.at(contentNumber)!.examImg})` }}
+                  key={idx} 
+                  onClick={(e) => clickImgHandle(idx, e)}
+                >
                 </div>
               )}
             </div>
-          </div> */}
+          </div>
         </>
       )}
 

@@ -31,3 +31,11 @@ body {
     text-wrap: balance;
   }
 }
+
+particle {
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  position: fixed;
+  opacity: 0;
+}
