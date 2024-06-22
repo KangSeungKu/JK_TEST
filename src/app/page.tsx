@@ -4,13 +4,15 @@ import Image from "next/image";
 
 import startButton from "@/../public/start_button.png";
 import gameTitle from "@/../public/game_title.png";
+import easyButton from "@/../public/easy_button.png";
+import hardButton from "@/../public/hard_button.png";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
 
-  const handleStartBtn = () => {
-    router.replace('/game');
+  const handleStartBtn = (mode: string) => {
+    router.replace(`/game?mode=${mode}`);
   }
 
   return (
@@ -18,9 +20,12 @@ export default function Home() {
       <div className="mt-[5vh]">
         <Image src={gameTitle} alt=""/>
       </div>
-      <div>
-        <button onClick={handleStartBtn}>
-          <Image src={startButton} alt=""/>
+      <div className="flex flex-col gap-4 p-12">
+        <button onClick={() => handleStartBtn("easy")}>
+          <Image src={easyButton} alt=""/>
+        </button>
+        <button onClick={() => handleStartBtn("hard")}>
+          <Image src={hardButton} alt=""/>
         </button>
       </div>
     </main>

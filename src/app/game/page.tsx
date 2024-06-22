@@ -1,7 +1,6 @@
 "use client";
 
 import Image, { StaticImageData } from "next/image";
-import {useRouter} from "next/navigation";
 import { MouseEvent, useState } from "react";
 
 import ingTitle2 from "@/../public/game_ing_title_02.png";
@@ -9,6 +8,15 @@ import gameEnd2 from "@/../public/game_end_02.png";
 import starOn from "@/../public/star_on.png";
 import starOff from "@/../public/star_off.png";
 import playNowBtn from "@/../public/play_now_button.png"
+
+type Props = {
+  searchParams: { mode: gameMode },
+}
+
+type gameMode = 'easy' | 'hard';
+type MODES = {
+  [key in gameMode]: contType[];
+};
 
 type contType = {
   examImg: string | StaticImageData;
@@ -61,53 +69,65 @@ function createParticle(x:number, y:number) {
   );
 }
 
-export default function Login() {
-  const imgSource = [
-    // {
-    //   examImg: content1,
-    //   answerImg: answer1,
-    //   ingState: false,
-    //   answer: false,
-    // },
-    // {
-    //   examImg: "/JK_TEST/content/content.png",
-    //   answerImg: "/JK_TEST/content/answer.png",
-    //   ingState: false,
-    //   answer: false,
-    // },
-    {
-      examImg: "/JK_TEST/content/content_01.png",
-      answerImg: "/JK_TEST/content/answer_01.png",
-      ingState: false,
-      answer: false,
-    },
-    {
-      examImg: "/JK_TEST/content/content_02.png",
-      answerImg: "/JK_TEST/content/answer_02.png",
-      ingState: false,
-      answer: false,
-    },
-    {
-      examImg: "/JK_TEST/content/content_03.png",
-      answerImg: "/JK_TEST/content/answer_03.png",
-      ingState: false,
-      answer: false,
-    },
-    {
-      examImg: "/JK_TEST/content/content_04.png",
-      answerImg: "/JK_TEST/content/answer_04.png",
-      ingState: false,
-      answer: false,
-    },
-    {
-      examImg: "/JK_TEST/content/content_05.png",
-      answerImg: "/JK_TEST/content/answer_05.png",
-      ingState: false,
-      answer: false,
-    },
-  ];
+export default function Page() {
+  const mode = 'hard';
 
-  const [contents, setContents] = useState<contType[]>(imgSource);
+  const gameData: MODES = {
+    easy: [
+      {
+        examImg: "/JK_TEST/content/content_01.png",
+        answerImg: "/JK_TEST/content/answer_01.png",
+        ingState: false,
+        answer: false,
+      },
+      {
+        examImg: "/JK_TEST/content/content_02.png",
+        answerImg: "/JK_TEST/content/answer_02.png",
+        ingState: false,
+        answer: false,
+      },
+      {
+        examImg: "/JK_TEST/content/content_03.png",
+        answerImg: "/JK_TEST/content/answer_03.png",
+        ingState: false,
+        answer: false,
+      },
+      {
+        examImg: "/JK_TEST/content/content_04.png",
+        answerImg: "/JK_TEST/content/answer_04.png",
+        ingState: false,
+        answer: false,
+      },
+    ],
+    hard: [
+      {
+        examImg: "/JK_TEST/content/content_05.png",
+        answerImg: "/JK_TEST/content/answer_05.png",
+        ingState: false,
+        answer: false,
+      },
+      {
+        examImg: "/JK_TEST/content/content_06.png",
+        answerImg: "/JK_TEST/content/answer_06.png",
+        ingState: false,
+        answer: false,
+      },
+      {
+        examImg: "/JK_TEST/content/content_07.png",
+        answerImg: "/JK_TEST/content/answer_07.png",
+        ingState: false,
+        answer: false,
+      },
+      {
+        examImg: "/JK_TEST/content/content_08.png",
+        answerImg: "/JK_TEST/content/answer_08.png",
+        ingState: false,
+        answer: false,
+      },
+    ],
+  }
+
+  const [contents, setContents] = useState<contType[]>(gameData[mode]);
   const [pickNumber, setPickNumber] = useState<number | null>(null);
   const [contentNumber, setContentNumber] = useState<number>(0);
   const [answerNumber, setAnswerNumber] = useState<number>(~~(Math.random() * 4));
@@ -127,7 +147,7 @@ export default function Login() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-1 bg-[#fff6c4] bg-cover bg-no-repeat bg-center">
-      {contentNumber === imgSource.length ? (
+      {contentNumber === contents.length ? (
         <>
           <div className="flex flex-col h-screen justify-center items-center gap-2">
             <Image src={gameEnd2} alt=""/>
