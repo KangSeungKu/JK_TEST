@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { StaticImageData } from "next/image";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 
 import ingTitle2 from "@/../public/game_ing_title_02.png";
 import gameEnd2 from "@/../public/game_end_02.png";
@@ -125,12 +125,20 @@ export default function GameProgression({ mode }: Props) {
     ],
   }
 
+  const successAudioRef = useRef<HTMLAudioElement | null>(null);
+  const failAudioRef = useRef<HTMLAudioElement | null>(null);
+
   const [contents, setContents] = useState<contType[]>(gameData[mode]);
   const [pickNumber, setPickNumber] = useState<number | null>(null);
   const [contentNumber, setContentNumber] = useState<number>(0);
   const [answerNumber, setAnswerNumber] = useState<number>(~~(Math.random() * 4));
 
   const clickImgHandle = (imgPickNumber: number, e: MouseEvent) => {
+    if (answerNumber === imgPickNumber) {
+        successAudioRef.current?.play();
+    } else {
+        failAudioRef.current?.play();
+    }
     setContents((prev) => prev.map((cont, idx) => contentNumber !== idx ? cont : ({...cont, ingState: true, answer: answerNumber === imgPickNumber})));
     setPickNumber(imgPickNumber);
     pop(e);
@@ -180,6 +188,8 @@ export default function GameProgression({ mode }: Props) {
               )}
             </div>
           </div>
+          <audio ref={successAudioRef} src="/JK_TEST/audio/Success_sound_effect.wav" />
+          <audio ref={failAudioRef} src="/JK_TEST/audio/Failed_sound_effect.wav" />
         </>
       )}
 
