@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleStartBtn = (mode: string) => {
-    router.replace(`/game?mode=${mode}`);
+    router.replace(`/game/${mode}`);
   }
 
   return (

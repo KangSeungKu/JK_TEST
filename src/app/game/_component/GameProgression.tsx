@@ -10,7 +10,7 @@ import starOff from "@/../public/star_off.png";
 import playNowBtn from "@/../public/play_now_button.png"
 
 type Props = {
-  searchParams: { mode: gameMode },
+  mode: gameMode,
 }
 
 type gameMode = 'easy' | 'hard';
@@ -69,9 +69,7 @@ function createParticle(x:number, y:number) {
   );
 }
 
-export default function Page() {
-  const mode = 'hard';
-
+export default function GameProgression({ mode }: Props) {
   const gameData: MODES = {
     easy: [
       {
