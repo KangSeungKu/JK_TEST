@@ -8,6 +8,8 @@ import gameEnd2 from "@/../public/game_end_02.png";
 import starOn from "@/../public/star_on.png";
 import starOff from "@/../public/star_off.png";
 import playNowBtn from "@/../public/play_now_button.png"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck, faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
 type Props = {
   mode: gameMode,
@@ -179,11 +181,20 @@ export default function GameProgression({ mode }: Props) {
             <div className="grid grid-cols-2 grid-rows-2 flex-grow gap-2">
               {Array.from({length: 4}).map((_, idx) => 
                 <div 
-                  className={`bg-cover bg-center border-solid rounded-lg overflow-hidden shadow-md${pickNumber === idx ? pickNumber === answerNumber ? ' border-4 border-[#38b700]' : ' border-4 border-[#ff0000]' : ' border-2 border-[#1f2f83]'}`} 
+                  className={`relative bg-cover bg-center border-solid rounded-lg overflow-hidden shadow-md${pickNumber === idx ? pickNumber === answerNumber ? ' border-4 border-[#38b700]' : ' border-4 border-[#ff0000]' : ' border-2 border-[#1f2f83]'}`} 
                   style={{ backgroundImage: `url(${idx === answerNumber ? contents.at(contentNumber)!.answerImg : contents.at(contentNumber)!.examImg})` }}
                   key={idx} 
                   onClick={(e) => clickImgHandle(idx, e)}
                 >
+                    {pickNumber === idx && 
+                        <div className={`absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-2xl ${pickNumber === answerNumber ? 'text-[#38b700]' : 'text-[#ff0000]'}`}>
+                            {pickNumber === answerNumber ? (
+                                <FontAwesomeIcon icon={faCircleCheck} size="4x" color="#38b700"/>
+                            ) : (
+                                <FontAwesomeIcon icon={faCircleXmark} size="4x" color="red"/>
+                            )}
+                        </div>
+                    }
                 </div>
               )}
             </div>
