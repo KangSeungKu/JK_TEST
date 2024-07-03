@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import GameProgression from "../_component/GameProgression";
+import IntroAndGames from "../_component/IntroAndGame";
 
 interface Props {
     params: {
@@ -17,7 +17,7 @@ export default function Page({ params }: Props) {
   }
 
   return (
-    <GameProgression    
+    <IntroAndGames    
         mode={mode}
     />
   );
